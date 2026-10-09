@@ -2,6 +2,13 @@
 // AULA 02 - SPA COM JAVASCRIPT PURO
 // ======================================================================
 
+// Array com as prioridades disponíveis
+const prioridades = [
+    "Baixa",
+    "Média",
+    "Alta"
+];
+
 // Array com dados temporários.
 // Eles existem apenas enquanto a página está aberta.
 const chamados = [
@@ -165,9 +172,12 @@ function mostrarNovoChamado() {
 
                 <select class="form-select" id="prioridade" required>
                     <option value="">Selecione</option>
-                    <option>Baixa</option>
-                    <option>Média</option>
-                    <option>Alta</option>
+
+                    ${prioridades.map(prioridade => `
+                        <option value="${prioridade}">
+                            ${prioridade}
+                        </option>
+                    `).join("")}
                 </select>
             </div>
 
