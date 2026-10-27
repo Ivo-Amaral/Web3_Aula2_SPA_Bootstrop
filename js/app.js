@@ -128,6 +128,36 @@ function badgePrioridade(prioridade) {
     return prioridade;
 }
 
+// Retorna a badge de acordo com o status
+function badgeStatus(status) {
+
+    if (status === "Aberto") {
+        return `
+            <span class="badge bg-primary">
+                Aberto
+            </span>
+        `;
+    }
+
+    if (status === "Em atendimento") {
+        return `
+            <span class="badge bg-warning text-dark">
+                Em atendimento
+            </span>
+        `;
+    }
+
+    if (status === "Encerrado") {
+        return `
+            <span class="badge bg-success">
+                Encerrado
+            </span>
+        `;
+    }
+
+    return status;
+}
+
 // Função que desenha a listagem.
 function mostrarChamados() {
 
@@ -154,7 +184,7 @@ function mostrarChamados() {
                                 <td>${chamado.id}</td>
                                 <td>${chamado.titulo}</td>
                                 <td>${badgePrioridade(chamado.prioridade)}</td>
-                                <td>${chamado.status}</td>
+                                <td>${badgeStatus(chamado.status)}</td>
                                 <td>
                                     <button
                                         class="btn btn-primary btn-sm"
@@ -248,7 +278,7 @@ function mostrarDetalhes(id) {
 
                 <p>
                     <strong>Status:</strong>
-                    ${chamado.status}
+                    ${badgeStatus(chamado.status)}
                 </p>
 
                 ${
@@ -317,7 +347,7 @@ function mostrarEncerramento(id) {
                     ${badgePrioridade(chamado.prioridade)}
                 </p>
 
-                <p><strong>Status atual:</strong> ${chamado.status}</p>
+                <p><strong>Status atual:</strong> ${badgeStatus(chamado.status)}</p>
 
                 <form id="formEncerramento">
 
