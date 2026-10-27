@@ -142,6 +142,7 @@ function mostrarChamados() {
                         <th>Título</th>
                         <th>Prioridade</th>
                         <th>Status</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
 
@@ -154,6 +155,27 @@ function mostrarChamados() {
                                 <td>${chamado.titulo}</td>
                                 <td>${badgePrioridade(chamado.prioridade)}</td>
                                 <td>${chamado.status}</td>
+                                <td>
+                                    <button
+                                        class="btn btn-primary btn-sm"
+                                        data-acao="visualizar"
+                                        data-id="${chamado.id}">
+                                        Visualizar
+                                    </button>
+
+                                    ${
+                                        chamado.status !== "Encerrado"
+                                        ? `
+                                            <button
+                                                class="btn btn-danger btn-sm"
+                                                data-acao="encerrar"
+                                                data-id="${chamado.id}">
+                                                Encerrar
+                                            </button>
+                                        `
+                                        : ""
+                                    }
+                                </td>
                             </tr>
                         `)
                         // join une todas as linhas sem vírgula.
@@ -163,6 +185,26 @@ function mostrarChamados() {
             </table>
         </div>
     `;
+
+    // Identifica os cliques nos botões da tabela
+    app.querySelectorAll("[data-acao]").forEach(botao => {
+
+        botao.addEventListener("click", () => {
+
+            const acao = botao.dataset.acao;
+            const id = Number(botao.dataset.id);
+
+            if (acao === "visualizar") {
+                alert("Visualizar chamado #" + id);
+            }
+
+            if (acao === "encerrar") {
+                alert("Encerrar chamado #" + id);
+            }
+
+        });
+
+    });
 }
 
 // Função que desenha o formulário.
