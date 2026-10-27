@@ -195,16 +195,211 @@ function mostrarChamados() {
             const id = Number(botao.dataset.id);
 
             if (acao === "visualizar") {
-                alert("Visualizar chamado #" + id);
+                mostrarDetalhes(id);
             }
 
             if (acao === "encerrar") {
-                alert("Encerrar chamado #" + id);
+                mostrarEncerramento(id);
             }
 
         });
 
     });
+}
+
+// Exibe os detalhes de um chamado
+function mostrarDetalhes(id) {
+
+    // Procura o chamado pelo ID
+    const chamado = chamados.find(
+        chamado => chamado.id === id
+    );
+
+    // Verifica se o chamado existe
+    if (!chamado) {
+        alert("Chamado não encontrado.");
+        mostrarChamados();
+        return;
+    }
+
+    // Monta a tela de detalhes
+    app.innerHTML = `
+        <h1 class="mb-4">
+            Detalhes do chamado #${chamado.id}
+        </h1>
+
+        <div class="card">
+            <div class="card-body">
+
+                <p>
+                    <strong>Título:</strong>
+                    ${chamado.titulo}
+                </p>
+
+                <p>
+                    <strong>Descrição:</strong>
+                    ${chamado.descricao}
+                </p>
+
+                <p>
+                    <strong>Prioridade:</strong>
+                    ${badgePrioridade(chamado.prioridade)}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    ${chamado.status}
+                </p>
+
+                ${
+                    chamado.status === "Encerrado"
+                    ? `
+                        <div class="alert alert-success">
+                            <strong>Solução realizada:</strong>
+                            <p class="mb-0">
+                                ${chamado.solucao || "Solução não registrada."}
+                            </p>
+                        </div>
+                    `
+                    : ""
+                }
+
+                <button
+                    class="btn btn-secondary"
+                    id="btnVoltar">
+                    Voltar para chamados
+                </button>
+
+            </div>
+        </div>
+    `;
+
+    // Evento do botão Voltar
+    document.getElementById("btnVoltar")
+        .addEventListener("click", mostrarChamados);
+}
+
+// Exibe a tela de encerramento do chamado
+function mostrarEncerramento(id) {
+
+    // Procura o chamado pelo ID
+    const chamado = chamados.find(
+        chamado => chamado.id === id
+    );
+
+    // Verifica se o chamado existe
+    if (!chamado) {
+        alert("Chamado não encontrado.");
+        mostrarChamados();
+        return;
+    }
+
+    // Impede encerrar um chamado já encerrado
+    if (chamado.status === "Encerrado") {
+        alert("Este chamado já está encerrado.");
+        mostrarChamados();
+        return;
+    }
+
+    // Monta a tela de encerramento
+    app.innerHTML = `
+        <h1 class="mb-4">Encerrar chamado #${chamado.id}</h1>
+
+        <div class="card">
+            <div class="card-body">
+
+                <p><strong>Título:</strong> ${chamado.titulo}</p>
+
+                <p><strong>Descrição:</strong> ${chamado.descricao}</p>
+
+                <p>
+                    <strong>Prioridade:</strong>
+                    ${badgePrioridade(chamado.prioridade)}
+                </p>
+
+                <p><strong>Status atual:</strong> ${chamado.status}</p>
+
+                <form id="formEncerramento">
+
+                    <div class="mb-3">
+                        <label for="solucao" class="form-label">
+                            O que foi feito?
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            id="solucao"
+                            rows="4"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        Confirmar encerramento
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            id="btnCancelar">
+                        Cancelar
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    `;
+
+    // Identifica o formulário
+    const formulario = document.getElementById("formEncerramento");
+
+    // Executa o encerramento ao enviar
+    formulario.addEventListener("submit", evento => {
+        encerrarChamado(evento, id);
+    });
+
+    // Volta para a listagem ao cancelar
+    document.getElementById("btnCancelar")
+        .addEventListener("click", mostrarChamados);
+}
+
+// Realiza o encerramento do chamado
+function encerrarChamado(evento, id) {
+
+    // Impede o recarregamento da página
+    evento.preventDefault();
+
+    // Procura o chamado no array
+    const chamado = chamados.find(
+        chamado => chamado.id === id
+    );
+
+    // Verifica se o chamado existe e pode ser encerrado
+    if (!chamado || chamado.status === "Encerrado") {
+        alert("Não foi possível encerrar este chamado.");
+        mostrarChamados();
+        return;
+    }
+
+    // Obtém a solução informada
+    const solucao = document.getElementById("solucao").value.trim();
+
+    // Valida o preenchimento
+    if (solucao === "") {
+        alert("Informe o procedimento realizado antes de encerrar.");
+        return;
+    }
+
+    // Armazena a solução no objeto
+    chamado.solucao = solucao;
+
+    // Atualiza o status
+    chamado.status = "Encerrado";
+
+    // Confirma a operação
+    alert("Chamado encerrado com sucesso!");
+
+    // Retorna para a listagem
+    mostrarChamados();
 }
 
 // Função que desenha o formulário.
