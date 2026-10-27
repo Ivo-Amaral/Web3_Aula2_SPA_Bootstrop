@@ -98,6 +98,36 @@ function mostrarDashboard() {
     `;
 }
 
+// Retorna a badge de acordo com a prioridade
+function badgePrioridade(prioridade) {
+
+    if (prioridade === "Alta") {
+        return `
+            <span class="badge bg-danger prioridade-alta">
+                Alta
+            </span>
+        `;
+    }
+
+    if (prioridade === "Média") {
+        return `
+            <span class="badge bg-warning text-dark">
+                Média
+            </span>
+        `;
+    }
+
+    if (prioridade === "Baixa") {
+        return `
+            <span class="badge bg-success">
+                Baixa
+            </span>
+        `;
+    }
+
+    return prioridade;
+}
+
 // Função que desenha a listagem.
 function mostrarChamados() {
 
@@ -122,7 +152,7 @@ function mostrarChamados() {
                             <tr>
                                 <td>${chamado.id}</td>
                                 <td>${chamado.titulo}</td>
-                                <td>${chamado.prioridade}</td>
+                                <td>${badgePrioridade(chamado.prioridade)}</td>
                                 <td>${chamado.status}</td>
                             </tr>
                         `)

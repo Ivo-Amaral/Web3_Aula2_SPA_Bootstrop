@@ -1,0 +1,22 @@
+/* Animação da prioridade Alta */
+@keyframes piscar {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+/* Aplica a animação */
+.prioridade-alta {
+    animation: piscar 1s infinite;
+}
+
+/* Respeita a preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+    .prioridade-alta {
+        animation: none;
+    }
+}
