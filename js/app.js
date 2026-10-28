@@ -240,6 +240,19 @@ function mostrarChamados() {
                                     </button>
 
                                     ${
+                                        chamado.status === "Aberto"
+                                        ? `
+                                            <button
+                                                class="btn btn-warning btn-sm"
+                                                data-acao="atender"
+                                                data-id="${chamado.id}">
+                                                Iniciar atendimento
+                                            </button>
+                                        `
+                                        : ""
+                                    }
+
+                                    ${
                                         chamado.status !== "Encerrado"
                                         ? `
                                             <button
@@ -274,6 +287,10 @@ function mostrarChamados() {
                 mostrarDetalhes(id);
             }
 
+            if (acao === "atender") {
+                iniciarAtendimento(id);
+            }
+
             if (acao === "encerrar") {
                 mostrarEncerramento(id);
             }
@@ -281,6 +298,45 @@ function mostrarChamados() {
         });
 
     });
+}
+
+// Altera o status do chamado para Em atendimento
+function iniciarAtendimento(id) {
+
+    // Procura o chamado pelo ID
+    const chamado = chamados.find(
+        chamado => chamado.id === id
+    );
+
+    // Verifica se o chamado existe
+    if (!chamado) {
+        alert("Chamado não encontrado.");
+        return;
+    }
+
+    // Permite iniciar apenas chamados abertos
+    if (chamado.status !== "Aberto") {
+        alert("Este chamado não está aberto.");
+        return;
+    }
+
+    // Confirma a operação
+    const confirmar = confirm(
+        "Deseja iniciar o atendimento do chamado #" + id + "?"
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    // Atualiza o status do objeto
+    chamado.status = "Em atendimento";
+
+    // Exibe mensagem de sucesso
+    alert("Atendimento iniciado com sucesso!");
+
+    // Atualiza a listagem
+    mostrarChamados();
 }
 
 // Exibe os detalhes de um chamado
