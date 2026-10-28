@@ -57,43 +57,89 @@ const chamados = [
 // Guardaremos a referência para alterar a tela.
 const app = document.getElementById("app");
 
-// Função que desenha o Dashboard.
+// Função que desenha o Dashboard
 function mostrarDashboard() {
 
-    // filter cria um novo array com chamados abertos.
-    // length conta quantos existem.
-    const abertos = chamados
-        .filter(chamado => chamado.status === "Aberto")
-        .length;
+    // Total de chamados
+    const total = chamados.length;
 
-    // innerHTML substitui o conteúdo da área principal.
+    // Chamados abertos
+    const abertos = chamados.filter(
+        chamado => chamado.status === "Aberto"
+    ).length;
+
+    // Chamados em atendimento
+    const emAtendimento = chamados.filter(
+        chamado => chamado.status === "Em atendimento"
+    ).length;
+
+    // Chamados encerrados
+    const encerrados = chamados.filter(
+        chamado => chamado.status === "Encerrado"
+    ).length;
+
+    // Chamados com prioridade Alta
+    const prioridadeAlta = chamados.filter(
+        chamado => chamado.prioridade === "Alta"
+    ).length;
+
+    // Monta o Dashboard
     app.innerHTML = `
         <h1 class="mb-4">Dashboard</h1>
 
         <div class="row g-3">
-            <div class="col-md-6">
-                <div class="card">
+
+            <div class="col-md-4">
+                <div class="card h-100">
                     <div class="card-body">
                         <h2 class="h5">Total de chamados</h2>
-
-                        <p class="display-6">
-                            ${chamados.length}
-                        </p>
+                        <p class="display-6">${total}</p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="card">
+            <div class="col-md-4">
+                <div class="card h-100 border-primary">
                     <div class="card-body">
-                        <h2 class="h5">Abertos</h2>
+                        <h2 class="h5">Chamados abertos</h2>
+                        <p class="display-6 text-primary">${abertos}</p>
+                    </div>
+                </div>
+            </div>
 
-                        <p class="display-6">
-                            ${abertos}
+            <div class="col-md-4">
+                <div class="card h-100 border-warning">
+                    <div class="card-body">
+                        <h2 class="h5">Em atendimento</h2>
+                        <p class="display-6 text-warning">
+                            ${emAtendimento}
                         </p>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-success">
+                    <div class="card-body">
+                        <h2 class="h5">Chamados encerrados</h2>
+                        <p class="display-6 text-success">
+                            ${encerrados}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-danger">
+                    <div class="card-body">
+                        <h2 class="h5">Prioridade Alta</h2>
+                        <p class="display-6 text-danger">
+                            ${prioridadeAlta}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     `;
 }
